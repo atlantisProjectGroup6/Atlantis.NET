@@ -18,18 +18,21 @@ namespace CalculationService
         public float weekAvg;
         [BsonElement("monthAvg")]
         public float monthAvg;
+        [BsonElement("deviceMAC")]
+        public string deviceMAC;
 
         public CalculatedMetrics()
         {
 
         }
 
-        public CalculatedMetrics(float _dayAvg, float _weekAvg, float _monthAvg)
+        public CalculatedMetrics(float _dayAvg, float _weekAvg, float _monthAvg, string _deviceMAC)
         {
 
             dayAvg = _dayAvg;
             weekAvg = _weekAvg;
             monthAvg = _monthAvg;
+            deviceMAC = _deviceMAC;
 
         }
 

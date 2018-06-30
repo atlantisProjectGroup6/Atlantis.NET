@@ -16,9 +16,7 @@ namespace CalculationService
         void InsertMetrics(CalculatedMetrics metrics);
 
         [OperationContract]
-        void CalcMetricsFromRaw(RawData rd, int nbValueDay, int nbValueWeek, int nbValueMonth);
-
-        [OperationContract]
-        void CalcMetricsFromJson( int nbValueDay, int nbValueWeek, int nbValueMonth);
+        [WebInvoke(Method = "POST")]
+        string updateAverage(string id, float value, int nbValueDay, int nbValueWeek, int nbValueMonth);
     }
 }

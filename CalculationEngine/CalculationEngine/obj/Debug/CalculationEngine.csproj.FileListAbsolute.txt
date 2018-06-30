@@ -1,0 +1,10 @@
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\obj\Debug\CalculationEngine.csprojAssemblyReference.cache
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\obj\Debug\CalculationEngine.csproj.CoreCompileInputs.cache
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\bin\Debug\CalculationEngine.exe.config
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\bin\Debug\CalculationEngine.exe
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\bin\Debug\CalculationEngine.pdb
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\obj\Debug\CalculationEngine.csproj.CopyComplete
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\obj\Debug\CalculationEngine.exe
+C:\Users\Mandwain\source\repos\AtlantisRepo\Atlantis.NET\Atlantis.NET\CalculationEngine\CalculationEngine\obj\Debug\CalculationEngine.pdb

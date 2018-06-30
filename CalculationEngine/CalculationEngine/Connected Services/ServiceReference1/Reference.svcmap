@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3957588a-8176-42a9-8e37-5dd4716e8afe" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:52282/CalculationEndpoint.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="CalculationEndpoint.xsd" MetadataType="Schema" ID="07b5ba95-0516-41c1-91b6-c45c4a8a06b3" SourceId="1" SourceUrl="http://localhost:52282/CalculationEndpoint.svc?xsd=xsd3" />
+    <MetadataFile FileName="CalculationEndpoint1.xsd" MetadataType="Schema" ID="cff742e7-ed01-487b-8270-7992a321b452" SourceId="1" SourceUrl="http://localhost:52282/CalculationEndpoint.svc?xsd=xsd1" />
+    <MetadataFile FileName="CalculationEndpoint2.xsd" MetadataType="Schema" ID="98573a51-1fe0-4d56-b970-75186462ed8a" SourceId="1" SourceUrl="http://localhost:52282/CalculationEndpoint.svc?xsd=xsd0" />
+    <MetadataFile FileName="CalculationEndpoint.disco" MetadataType="Disco" ID="c1b14179-e3b5-41ee-9255-ea3dd319496e" SourceId="1" SourceUrl="http://localhost:52282/CalculationEndpoint.svc?disco" />
+    <MetadataFile FileName="CalculationEndpoint3.xsd" MetadataType="Schema" ID="671f69fe-8ed0-4dc5-bb5d-102c81104bf7" SourceId="1" SourceUrl="http://localhost:52282/CalculationEndpoint.svc?xsd=xsd2" />
+    <MetadataFile FileName="Service1.wsdl" MetadataType="Wsdl" ID="889e3a9a-49cf-4fc0-ac86-6546f3d86cd7" SourceId="1" SourceUrl="http://localhost:52282/CalculationEndpoint.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

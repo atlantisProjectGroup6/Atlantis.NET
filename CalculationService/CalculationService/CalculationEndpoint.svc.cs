@@ -9,7 +9,6 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
-using static CalculationService.JsonParser;
 
 namespace CalculationService
 {
@@ -35,11 +34,11 @@ namespace CalculationService
         }
 
 
-        public float getOneDayAverage(string id)
+        public float getOneDayAverage(string deviceMAC)
         {
             var collection = createDatabase();
             float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("id", ObjectId.Parse(id));
+            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
             List<CalculatedMetrics> c = collection.Find(filter).ToList();
             foreach (var item in c)
             {
@@ -49,11 +48,11 @@ namespace CalculationService
             return result;
         }
 
-        public float getOneWeekAverage(string id)
+        public float getOneWeekAverage(string deviceMAC)
         {
             var collection = createDatabase();
             float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("id", ObjectId.Parse(id));
+            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
             List<CalculatedMetrics> c = collection.Find(filter).ToList();
             foreach (var item in c)
             {
@@ -63,11 +62,11 @@ namespace CalculationService
             return result;
         }
 
-        public float getOneMonthAverage(string id)
+        public float getOneMonthAverage(string deviceMAC)
         {
             var collection = createDatabase();
             float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("id", ObjectId.Parse(id));
+            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
             List<CalculatedMetrics> c = collection.Find(filter).ToList();
             foreach (var item in c)
             {
@@ -77,47 +76,32 @@ namespace CalculationService
             return result;
         }
 
-        //ToDO centraliser updateAverage(id, moyd, moyw, moyM)
-        public void updateOneDayAverage(RawData rd, int nbValue)
+        public string updateAverage(string deviceMAC, float value, int nbValueDay, int nbValueWeek, int nbValueMonth)
         {
             var collection = createDatabase();
             Formulas f = new Formulas();
-            var update = Builders<CalculatedMetrics>.Update.Set("dayAvg", f.AverageFromPrevAverage(getOneDayAverage(rd.DeviceMac), rd.Value, nbValue));
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("id", ObjectId.Parse(rd.DeviceMac));
-            collection.UpdateOne(filter, update);
+            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
 
+
+
+            if (collection.Find(filter).ToList().Count == 0)
+            {
+                InsertMetrics(new CalculatedMetrics(value, value, value, deviceMAC));
+            }
+            else
+            {
+                var updateDay = Builders<CalculatedMetrics>.Update.Set("dayAvg", f.AverageFromPrevAverage(getOneDayAverage(deviceMAC), value, nbValueDay));
+                var updateWeek = Builders<CalculatedMetrics>.Update.Set("weekAvg", f.AverageFromPrevAverage(getOneWeekAverage(deviceMAC), value, nbValueWeek));
+                var updateMonth = Builders<CalculatedMetrics>.Update.Set("monthAvg", f.AverageFromPrevAverage(getOneMonthAverage(deviceMAC), value, nbValueMonth));
+
+
+                collection.UpdateOne(filter, updateDay);
+                collection.UpdateOne(filter, updateWeek);
+                collection.UpdateOne(filter, updateMonth);
+            }
+
+            return "Injction en BDD OK";
         }
-        public void updateOneWeekAverage(RawData rd, int nbValue)
-        {
-            var collection = createDatabase();
-            Formulas f = new Formulas();
-            var update = Builders<CalculatedMetrics>.Update.Set("weekAvg", f.AverageFromPrevAverage(getOneWeekAverage(rd.DeviceMac), rd.Value, nbValue));
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("id", ObjectId.Parse(rd.DeviceMac));
-            collection.UpdateOne(filter, update);
-
-        }
-        public void updateOneMonthAverage(RawData rd, int nbValue)
-        {
-            var collection = createDatabase();
-            Formulas f = new Formulas();
-            var update = Builders<CalculatedMetrics>.Update.Set("monthAvg", f.AverageFromPrevAverage(getOneMonthAverage(rd.DeviceMac), rd.Value, nbValue));
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("id", ObjectId.Parse(rd.DeviceMac));
-            collection.UpdateOne(filter, update);
-
-        }
-
-        public void CalcMetricsFromRaw(RawData rd, int nbValueDay, int nbValueWeek, int nbValueMonth)
-        {
-            Formulas f = new Formulas();
-
-            ////utilisation d'update pour chaque metrics
-            updateOneDayAverage(rd, nbValueDay);
-            updateOneWeekAverage(rd, nbValueWeek);
-            updateOneMonthAverage(rd, nbValueMonth);
-
-
-        }
-
-
+       
     }
 }
