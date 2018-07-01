@@ -102,11 +102,11 @@ namespace CalculationService
        
         public void JEEUpdateDB(string json)
         {
-            //envoi a la BDD JEE
-            //string url = "http://192.168.0.10:21080/AtlantisJavaEE-war/services/mobile";
-            //Connection connection = new Connection(url);
-            //Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
-            Debug.WriteLine("ok");
+            
+            string url = "http://192.168.0.10:21080/AtlantisJavaEE-war/services/mobile";
+            Connection connection = new Connection(url);
+            Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
+            
 
 
 

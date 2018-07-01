@@ -16,12 +16,19 @@ namespace CalculationService
         void InsertMetrics(CalculatedMetrics metrics);
 
         [OperationContract]
-        [WebInvoke(Method = "POST")]
+        [WebInvoke(Method = "POST",
+            ResponseFormat = WebMessageFormat.Xml,
+            BodyStyle = WebMessageBodyStyle.Wrapped,
+           UriTemplate ="MongoUpdate" )]
         string updateAverage(string id, float value, int nbValueDay, int nbValueWeek, int nbValueMonth);
 
 
         [OperationContract]
-        [WebInvoke(Method ="POST")]
+        [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+           UriTemplate = "JEEUpdate")]
         void JEEUpdateDB(string json);
     }
 }
