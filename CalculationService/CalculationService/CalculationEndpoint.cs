@@ -18,5 +18,10 @@ namespace CalculationService
         [OperationContract]
         [WebInvoke(Method = "POST")]
         string updateAverage(string id, float value, int nbValueDay, int nbValueWeek, int nbValueMonth);
+
+
+        [OperationContract]
+        [WebInvoke(Method ="POST")]
+        void JEEUpdateDB(string json);
     }
 }

@@ -94,6 +94,7 @@
       <DependentUpon>CalculationEndpoint.svc</DependentUpon>
     </Compile>
     <Compile Include="CalculationEndpoint.cs" />
+    <Compile Include="Connection.cs" />
     <Compile Include="Formulas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

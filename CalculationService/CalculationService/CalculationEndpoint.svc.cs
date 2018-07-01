@@ -3,17 +3,17 @@ using MongoDB.Driver;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace CalculationService
 {
-    // REMARQUE : vous pouvez utiliser la commande Renommer du menu Refactoriser pour changer le nom de classe "Service1" dans le code, le fichier svc et le fichier de configuration.
-    // REMARQUE : pour lancer le client test WCF afin de tester ce service, sélectionnez Service1.svc ou Service1.svc.cs dans l'Explorateur de solutions et démarrez le débogage.
     public class Service1 : CalculationEndpoint
     {
         const string dbURL = "mongodb://localhost:27017";
@@ -82,8 +82,6 @@ namespace CalculationService
             Formulas f = new Formulas();
             var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
 
-
-
             if (collection.Find(filter).ToList().Count == 0)
             {
                 InsertMetrics(new CalculatedMetrics(value, value, value, deviceMAC));
@@ -99,9 +97,21 @@ namespace CalculationService
                 collection.UpdateOne(filter, updateWeek);
                 collection.UpdateOne(filter, updateMonth);
             }
-
-            return "Injction en BDD OK";
+            return "Injection en BDD OK";
         }
        
+        public void JEEUpdateDB(string json)
+        {
+            //envoi a la BDD JEE
+            //string url = "http://192.168.0.10:21080/AtlantisJavaEE-war/services/mobile";
+            //Connection connection = new Connection(url);
+            //Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
+            Debug.WriteLine("ok");
+
+
+
+        }
+
+
     }
 }
