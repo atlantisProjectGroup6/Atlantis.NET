@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CalculationService
 {
-    public class Service1 : CalculationEndpoint
+    public class CalculationService : ICalculationEndpoint
     {
         const string dbURL = "mongodb://localhost:27017";
         const string dataBase = "Metrics";
@@ -116,6 +116,10 @@ namespace CalculationService
             return res;
         }
 
+        public string post(string a)
+        {
+            return a;
+        }
 
     }
 }

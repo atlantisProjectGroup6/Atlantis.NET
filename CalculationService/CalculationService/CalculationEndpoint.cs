@@ -11,7 +11,7 @@ namespace CalculationService
 {
     // REMARQUE : vous pouvez utiliser la commande Renommer du menu Refactoriser pour changer le nom d'interface "IService1" à la fois dans le code et le fichier de configuration.
     [ServiceContract]
-    public interface CalculationEndpoint
+    public interface ICalculationEndpoint
     {
         [OperationContract]
         void InsertMetrics(CalculatedMetrics metrics);
@@ -28,8 +28,18 @@ namespace CalculationService
         [WebInvoke(Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
+            BodyStyle = WebMessageBodyStyle.Bare,
            UriTemplate = "JEEUpdate")]
         string JEEUpdateDB(Stream streamdata);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json,
+            BodyStyle = WebMessageBodyStyle.Bare,
+           UriTemplate = "post")]
+        string post(string a);
     }
+
+
 }
