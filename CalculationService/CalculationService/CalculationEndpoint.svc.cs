@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
@@ -109,6 +110,11 @@ namespace CalculationService
             ////Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
             var json = new JavaScriptSerializer().Serialize(mc);
             Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json));
+
+            Thread.Sleep(5000);
+            //appel a l'engine
+
+
             return mc;
         }
 
