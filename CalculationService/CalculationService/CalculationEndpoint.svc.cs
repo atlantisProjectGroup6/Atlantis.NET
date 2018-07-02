@@ -66,18 +66,20 @@ namespace CalculationService
             return result;
         }
 
-        public float getOneMonthAverage(string deviceMAC)
+        public AverageSend getOneMonthAverage(DeviceMacReceived dm)
         {
             var collection = createDatabase();
             float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
+            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", dm);
             List<CalculatedMetrics> c = collection.Find(filter).ToList();
             foreach (var item in c)
             {
-                result = item.monthAvg;
+                    result = item.monthAvg;
             }
 
-            return result;
+            AverageSend a = new AverageSend();
+            a.average = result;
+            return a;
         }
 
         //public string update3Average(string deviceMAC, float value, int nbValueDay, int nbValueWeek, int nbValueMonth)

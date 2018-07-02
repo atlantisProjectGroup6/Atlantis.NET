@@ -51,5 +51,13 @@ namespace CalculationService
         //    RequestFormat = WebMessageFormat.Json,
         //    ResponseFormat = WebMessageFormat.Json)]
         //string updateAverage(string deviceMAC, float value);
+
+
+        [OperationContract]
+        [WebInvoke(Method ="POST",
+            UriTemplate = "device/monthAverage",
+            ResponseFormat = WebMessageFormat.Json,
+            RequestFormat = WebMessageFormat.Json)]
+        AverageSend getOneMonthAverage(DeviceMacReceived devicemac);
     }
 }

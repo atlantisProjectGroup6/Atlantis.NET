@@ -91,12 +91,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Average.cs" />
     <Compile Include="CalculatedMetrics.cs" />
     <Compile Include="CalculationEndpoint.svc.cs">
       <DependentUpon>CalculationEndpoint.svc</DependentUpon>
     </Compile>
     <Compile Include="CalculationEndpoint.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="DeviceMacReceivedcs.cs" />
     <Compile Include="Formulas.cs" />
     <Compile Include="JeeMetric.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
