@@ -9,7 +9,7 @@ namespace CalculationService
     {
         public float AverageFromPrevAverage(float prevAverage, float newValue, int nbValue)
         {
-            return ((prevAverage * nbValue) + newValue) / (nbValue+1);
+            return ((prevAverage * nbValue) + newValue) / (nbValue + 1);
         }
     }
 }

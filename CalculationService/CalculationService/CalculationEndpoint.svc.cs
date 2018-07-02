@@ -132,7 +132,7 @@ namespace CalculationService
 
         public void JEEUpdateDB(MetricContract metric)
         {
-            
+
             string url = "http://192.168.43.70:21080/AtlantisJavaEE-war/services/mobile";
             Connection connection = new Connection(url);
             ////Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
@@ -168,6 +168,6 @@ namespace CalculationService
         }
 
 
-        
+
     }
 }
