@@ -7,21 +7,16 @@ using System.Web;
 namespace CalculationService
 {
     [DataContract]
-    public class JeeMetric
+    public class MetricForCalculation
     {
         [DataMember]
-        public string mac { get; set; }
-
-        [DataMember]
-        public int timestamp { get; set; }
+        public int id { get; set; }
 
         [DataMember]
         public string value { get; set; }
 
         [DataMember]
-        public int type { get; set; }
+        public int date { get; set; }
 
-        [DataMember]
-        public string name { get; set; }
     }
 }

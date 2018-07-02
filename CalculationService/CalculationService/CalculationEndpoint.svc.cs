@@ -133,24 +133,29 @@ namespace CalculationService
         public void JEEUpdateDB(MetricContract metric)
         {
 
-            string url = "http://192.168.43.70:21080/AtlantisJavaEE-war/services/mobile";
+            string url = "http://192.168.1.9:21080/AtlantisJavaEE-war/services/mobile";
             Connection connection = new Connection(url);
-            ////Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
             var json = new JavaScriptSerializer().Serialize(metric);
             Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json));
 
-            //Thread.Sleep(5000);
-
-            //string res =  connection.getData(httpVerb.GET, "/allMetrics", metric.mac);
-            //List<JeeMetric> jeeMetrics = (List<JeeMetric>) new JavaScriptSerializer().DeserializeObject(res);
-            //float total = 0;
-            //foreach (var item in jeeMetrics)
-            //{
-            //    total = total +  float.Parse(item.value); 
-            //}
-            //float moyenne = total / jeeMetrics.Count();
-            //updateAverage(metric.mac, moyenne);
-            //return jeeMetrics;
+            
+            if (!(metric == null))
+            {
+                string res = connection.getData(httpVerb.GET, "/allMetrics", "/device/" + metric.mac);
+                var result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
+                MetricForCalculation mfc = new MetricForCalculation();
+                mfc.date = metric.timestamp;
+                mfc.value = metric.value;
+                result.Add(mfc);
+                float total = 0;
+                foreach (var item in result)
+                {
+                    total = total + float.Parse(item.value);
+                }
+                float moyenne = total / result.Count();
+                updateAverage(metric.mac, moyenne);
+            }
+            
         }
 
         public string post(MetricContract rd)

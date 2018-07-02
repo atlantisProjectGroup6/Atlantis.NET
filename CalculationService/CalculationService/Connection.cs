@@ -60,7 +60,7 @@ namespace CalculationService
         public string getData(httpVerb method, string endPoint, string postJSON)
         {
             string strResponse = string.Empty;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url + "/" + postJSON + endPoint);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url  + postJSON + endPoint);
             request.Method = method.ToString();
 
 
