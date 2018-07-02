@@ -28,9 +28,8 @@ namespace CalculationService
         [WebInvoke(Method = "POST",
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
-            BodyStyle = WebMessageBodyStyle.Bare,
            UriTemplate = "JEEUpdate")]
-        string JEEUpdateDB(Stream streamdata);
+        MetricContract JEEUpdateDB(MetricContract mc);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -38,8 +37,16 @@ namespace CalculationService
             ResponseFormat = WebMessageFormat.Json,
             BodyStyle = WebMessageBodyStyle.Bare,
            UriTemplate = "post")]
-        string post(string a);
+        string post(MetricContract rd);
+
+        [OperationContract]
+        [WebGet(UriTemplate = "/GetMetricDetails",
+            RequestFormat = WebMessageFormat.Json,
+            ResponseFormat = WebMessageFormat.Json)]
+        MetricContract GetMetricDetails();
+
     }
+
 
 
 }

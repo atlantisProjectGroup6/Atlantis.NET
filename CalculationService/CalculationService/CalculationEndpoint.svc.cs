@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace CalculationService
 {
@@ -100,26 +101,29 @@ namespace CalculationService
             return "Injection en BDD OK";
         }
        
-        public string JEEUpdateDB(Stream streamdata)
+        public MetricContract JEEUpdateDB(MetricContract mc)
         {
             
-            //string url = "http://192.168.0.10:21080/AtlantisJavaEE-war/services/mobile";
-            //Connection connection = new Connection(url);
+            string url = "http://192.168.43.70:21080/AtlantisJavaEE-war/services/mobile";
+            Connection connection = new Connection(url);
             ////Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json.ToString()));
-
-            StreamReader reader = new StreamReader(streamdata);
-            string res = reader.ReadToEnd();
-            reader.Close();
-            reader.Dispose();
-
-            //Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", res));
-            return res;
+            var json = new JavaScriptSerializer().Serialize(mc);
+            Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json));
+            return mc;
         }
 
-        public string post(string a)
+        public string post(MetricContract rd)
         {
-            return a;
+            return "";
         }
 
+        public MetricContract GetMetricDetails()
+        {
+            MetricContract metric = new MetricContract();
+
+            metric.mac = "A5-A6";
+
+            return metric;
+        }
     }
 }

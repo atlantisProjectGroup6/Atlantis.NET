@@ -13,9 +13,10 @@ namespace CalculationEngine
         public void CalcMetricsFromJson(int nbValueDay, int nbValueWeek, int nbValueMonth)
         {
             Formulas f = new Formulas();
-            string json = "[\"25\",\"24\"]";
+            string json = "{\"mac\":\"C4: 67:2A: FB: 1B: 4E\",\"timestamp\":1530459131,\"value\":\"True\",\"type\":1,\"name\":\"Presence sensor garage\"}";
 
-            
+
+
 
             List<String> rawList = JsonConvert.DeserializeObject<List<String>>(json);
             foreach (var item in rawList)
