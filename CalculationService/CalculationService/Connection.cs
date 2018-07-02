@@ -56,5 +56,37 @@ namespace CalculationService
             }
             return strResponse;
         }
+
+        public string getData(httpVerb method, string endPoint, string postJSON)
+        {
+            string strResponse = string.Empty;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url +"/"+ postJSON + endPoint);
+            request.Method = method.ToString();
+
+           
+            try
+            {
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        if (responseStream != null)
+                        {
+                            using (StreamReader reader = new StreamReader(responseStream))
+                            {
+                                strResponse = reader.ReadToEnd();
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return strResponse;
+        }
+
+
     }
 }

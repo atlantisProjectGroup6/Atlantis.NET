@@ -16,12 +16,12 @@ namespace CalculationService
         [OperationContract]
         void InsertMetrics(CalculatedMetrics metrics);
 
-        [OperationContract]
-        [WebInvoke(Method = "POST",
-            ResponseFormat = WebMessageFormat.Xml,
-            BodyStyle = WebMessageBodyStyle.Wrapped,
-           UriTemplate ="MongoUpdate" )]
-        string updateAverage(string id, float value, int nbValueDay, int nbValueWeek, int nbValueMonth);
+        //[OperationContract]
+        //[WebInvoke(Method = "POST",
+        //    ResponseFormat = WebMessageFormat.Xml,
+        //    BodyStyle = WebMessageBodyStyle.Wrapped,
+        //   UriTemplate ="MongoUpdate" )]
+        //string update3Average(string id, float value, int nbValueDay, int nbValueWeek, int nbValueMonth);
 
 
         [OperationContract]
@@ -29,7 +29,7 @@ namespace CalculationService
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
            UriTemplate = "JEEUpdate")]
-        MetricContract JEEUpdateDB(MetricContract mc);
+        void JEEUpdateDB(MetricContract mc);
 
         [OperationContract]
         [WebInvoke(Method = "POST",
@@ -45,8 +45,11 @@ namespace CalculationService
             ResponseFormat = WebMessageFormat.Json)]
         MetricContract GetMetricDetails();
 
+
+        //[OperationContract]
+        //[WebGet(UriTemplate = "/update1average",
+        //    RequestFormat = WebMessageFormat.Json,
+        //    ResponseFormat = WebMessageFormat.Json)]
+        //string updateAverage(string deviceMAC, float value);
     }
-
-
-
 }
