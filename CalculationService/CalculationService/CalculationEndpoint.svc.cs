@@ -69,16 +69,19 @@ namespace CalculationService
         public AverageSend getOneMonthAverage(DeviceMacReceived dm)
         {
             var collection = createDatabase();
-            float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", dm);
-            List<CalculatedMetrics> c = collection.Find(filter).ToList();
-            foreach (var item in c)
-            {
-                    result = item.monthAvg;
-            }
+            //CalculatedMetrics cm = collection.AsQueryable<Entity>().Where<Entity>(Metrics => Metrics.deviceMAC == "EC:77:F5:D5:E9:CC").SingleOrDefault();
 
+            var query =
+                from e in collection.AsQueryable<CalculatedMetrics>()
+                where e.deviceMAC == dm.deviceMac
+                select e;
+            float res = 0;
+            foreach (var item in query)
+            {
+                res = item.dayAvg;
+            }
             AverageSend a = new AverageSend();
-            a.average = result;
+            a.average = res;
             return a;
         }
 
