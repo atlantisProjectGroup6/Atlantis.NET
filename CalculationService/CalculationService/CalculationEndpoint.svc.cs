@@ -109,7 +109,7 @@ namespace CalculationService
             result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
             
             float lesser = float.Parse(metric.value);
-            if (result!= null)
+            if (result!= null && result.Count > 0)
             {
                 foreach (var item in result)
                 {
@@ -133,7 +133,7 @@ namespace CalculationService
             result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
 
             float higher = float.Parse(metric.value);
-            if (result != null)
+            if (result != null && result.Count > 0)
             {
                 foreach (var item in result)
                 {
@@ -160,13 +160,13 @@ namespace CalculationService
             //calcul de moyenne
             float total = 0;
 
-            if (result != null)
+            if (result != null && result.Count >0)
             {
                 foreach (var item in result)
                 {
                     total = total + float.Parse(item.value);
                 }
-                float moyenne = total / result.Count();
+                float moyenne = total / result.Count;
                 return moyenne;
             }
             return float.Parse(metric.value);
