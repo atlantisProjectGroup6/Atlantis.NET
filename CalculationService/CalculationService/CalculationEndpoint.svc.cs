@@ -37,144 +37,175 @@ namespace CalculationService
             collection.InsertOneAsync(metrics);
         }
 
-
-        public float getOneDayAverage(string deviceMAC)
+        public CalculatedMetrics getAllCalculatedMetricsByMac(DeviceMacReceived dm)
         {
             var collection = createDatabase();
-            float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
-            List<CalculatedMetrics> c = collection.Find(filter).ToList();
-            foreach (var item in c)
-            {
-                result = item.dayAvg;
-            }
-
-            return result;
-        }
-
-        public float getOneWeekAverage(string deviceMAC)
-        {
-            var collection = createDatabase();
-            float result = 0;
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
-            List<CalculatedMetrics> c = collection.Find(filter).ToList();
-            foreach (var item in c)
-            {
-                result = item.weekAvg;
-            }
-
-            return result;
-        }
-
-        public AverageSend getOneMonthAverage(DeviceMacReceived dm)
-        {
-            var collection = createDatabase();
-            //CalculatedMetrics cm = collection.AsQueryable<Entity>().Where<Entity>(Metrics => Metrics.deviceMAC == "EC:77:F5:D5:E9:CC").SingleOrDefault();
-
             var query =
                 from e in collection.AsQueryable<CalculatedMetrics>()
                 where e.deviceMAC == dm.deviceMac
                 select e;
-            float res = 0;
+            var a = new CalculatedMetrics();
             foreach (var item in query)
             {
-                res = item.dayAvg;
+                a = item;
             }
-            AverageSend a = new AverageSend();
-            a.average = res;
             return a;
         }
 
-        //public string update3Average(string deviceMAC, float value, int nbValueDay, int nbValueWeek, int nbValueMonth)
-        //{
-        //    var collection = createDatabase();
-        //    Formulas f = new Formulas();
-        //    var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
-
-        //    if (collection.Find(filter).ToList().Count == 0)
-        //    {
-        //        InsertMetrics(new CalculatedMetrics(value, value, value, deviceMAC));
-        //    }
-        //    else
-        //    {
-        //        var updateDay = Builders<CalculatedMetrics>.Update.Set("dayAvg", f.AverageFromPrevAverage(getOneDayAverage(deviceMAC), value, nbValueDay));
-        //        var updateWeek = Builders<CalculatedMetrics>.Update.Set("weekAvg", f.AverageFromPrevAverage(getOneWeekAverage(deviceMAC), value, nbValueWeek));
-        //        var updateMonth = Builders<CalculatedMetrics>.Update.Set("monthAvg", f.AverageFromPrevAverage(getOneMonthAverage(deviceMAC), value, nbValueMonth));
-
-
-        //        collection.UpdateOne(filter, updateDay);
-        //        collection.UpdateOne(filter, updateWeek);
-        //        collection.UpdateOne(filter, updateMonth);
-        //    }
-        //    return "Injection en BDD OK";
-        //}
-
-
-        public string updateAverage(string deviceMAC, float value)
+        string url = "http://192.168.0.10:21080/AtlantisJavaEE-war/services/mobile";
+        public string JEEUpdateDB(MetricContract metric)
         {
-            var collection = createDatabase();
-            Formulas f = new Formulas();
-            var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", deviceMAC);
-
-            if (collection.Find(filter).ToList().Count == 0)
+            if (!(metric == null))
             {
-                InsertMetrics(new CalculatedMetrics(value, value, value, deviceMAC));
+                
+                Connection connection = new Connection(url);
+                var json = new JavaScriptSerializer().Serialize(metric);
+                Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json));
+                
+                if (metric.type > 1 && metric.type < 7)
+                {
+                    var collection = createDatabase();
+                    var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", metric.mac);
+                    if (collection.Find(filter).ToList().Count == 0)
+                    {
+                        InsertMetrics(new CalculatedMetrics(float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), float.Parse(metric.value), metric.mac));
+                    }
+                    else
+                    {
+                        //Mise a jour de la liste de valeurs 
+                        
+
+                        CalculatedMetrics calculated = new CalculatedMetrics();
+
+                        calculated.dayMin = updateMinimum(metric, "day", collection, filter, connection);
+                        calculated.dayMax = updateMaximum(metric, "day", collection, filter, connection);
+                        calculated.dayAvg = updateAverage(metric, "day", collection, filter, connection);
+
+                        calculated.weekMin = updateMinimum(metric, "week", collection, filter, connection);
+                        calculated.weekMax = updateMaximum(metric, "week", collection, filter, connection);
+                        calculated.weekAvg = updateAverage(metric, "week", collection, filter, connection);
+
+                        calculated.monthMin = updateMinimum(metric, "month", collection, filter, connection);
+                        calculated.monthMax = updateMaximum(metric, "month", collection, filter, connection);
+                        calculated.monthAvg = updateAverage(metric, "month", collection, filter, connection);
+
+                        updateDb(calculated, collection, filter);
+                    }
+                    return " UPDATE SUCCESS";
+                }
+                else
+                    return "wrong device Type";
             }
             else
+                return "parameter is null";
+        }
+
+        private float updateMinimum(MetricContract metric, string timeSpan, IMongoCollection<CalculatedMetrics> collection, FilterDefinition<CalculatedMetrics> filter, Connection connection)
+        {
+            string urlTmp = url + "/device/" + metric.mac + "/" + timeSpan;
+            string res = connection.getData(httpVerb.GET, urlTmp);
+            
+            List<MetricForCalculation> result = new List<MetricForCalculation>();
+            result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
+            
+            float lesser = float.Parse(metric.value);
+            if (result!= null)
             {
-                var updateDay = Builders<CalculatedMetrics>.Update.Set("dayAvg", value);
-                var updateWeek = Builders<CalculatedMetrics>.Update.Set("weekAvg", value);
-                var updateMonth = Builders<CalculatedMetrics>.Update.Set("monthAvg", value);
-
-
-                collection.UpdateOne(filter, updateDay);
-                collection.UpdateOne(filter, updateWeek);
-                collection.UpdateOne(filter, updateMonth);
+                foreach (var item in result)
+                {
+                    if (lesser > float.Parse(item.value))
+                    {
+                        lesser = float.Parse(item.value);
+                    }
+                }
             }
-            return "Injection en BDD OK";
+            return lesser;
+            
         }
 
 
-        public void JEEUpdateDB(MetricContract metric)
+
+        private float updateMaximum(MetricContract metric, string timeSpan, IMongoCollection<CalculatedMetrics> collection, FilterDefinition<CalculatedMetrics> filter, Connection connection)
+        {
+            string urlTmp = url + "/device/" + metric.mac + "/" + timeSpan;
+            string res = connection.getData(httpVerb.GET, urlTmp);
+            List<MetricForCalculation> result = new List<MetricForCalculation>();
+            result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
+
+            float higher = float.Parse(metric.value);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    if (higher < float.Parse(item.value))
+                    {
+                        higher = float.Parse(item.value);
+                    }
+                }
+            }
+            return higher;
+            
+        }
+
+        public float updateAverage(MetricContract metric, string timeSpan, IMongoCollection<CalculatedMetrics> collection, FilterDefinition<CalculatedMetrics> filter, Connection connection)
         {
 
-            string url = "http://192.168.1.9:21080/AtlantisJavaEE-war/services/mobile";
-            Connection connection = new Connection(url);
-            var json = new JavaScriptSerializer().Serialize(metric);
-            Task.Run(() => connection.sendData(httpVerb.POST, "/addMetric", json));
+            //var filter = Builders<CalculatedMetrics>.Filter.Eq("deviceMAC", metric.mac);
 
-            
-            if (!(metric == null))
+            string urlTmp = url + "/device/" + metric.mac + "/" + timeSpan;
+            string res = connection.getData(httpVerb.GET, urlTmp);
+            List<MetricForCalculation> result = new List<MetricForCalculation>();
+            result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
+
+            //calcul de moyenne
+            float total = 0;
+
+            if (result != null)
             {
-                string res = connection.getData(httpVerb.GET, "/allMetrics", "/device/" + metric.mac);
-                var result = JsonConvert.DeserializeObject<List<MetricForCalculation>>(res);
-                MetricForCalculation mfc = new MetricForCalculation();
-                mfc.date = metric.timestamp;
-                mfc.value = metric.value;
-                result.Add(mfc);
-                float total = 0;
                 foreach (var item in result)
                 {
                     total = total + float.Parse(item.value);
                 }
                 float moyenne = total / result.Count();
-                updateAverage(metric.mac, moyenne);
+                return moyenne;
             }
-            
+            return float.Parse(metric.value);
         }
 
-        public string post(MetricContract rd)
+        public void updateDb(CalculatedMetrics calculatedMetrics, IMongoCollection<CalculatedMetrics> collection, FilterDefinition<CalculatedMetrics> filter)
         {
-            return "";
-        }
+            //insertion en base
+            if (collection.Find(filter).ToList().Count == 0)
+            {
+                InsertMetrics(calculatedMetrics);
+            }
+            else
+            {
+                var updateDayMin = Builders<CalculatedMetrics>.Update.Set("DayMin", calculatedMetrics.dayMin);
+                var updateDayMax = Builders<CalculatedMetrics>.Update.Set("DayMax", calculatedMetrics.dayMax);
+                var updateDayAvg = Builders<CalculatedMetrics>.Update.Set("DayAvg", calculatedMetrics.dayAvg);
 
-        public MetricContract GetMetricDetails()
-        {
-            MetricContract metric = new MetricContract();
+                var updateWeekMin = Builders<CalculatedMetrics>.Update.Set("WeekMin", calculatedMetrics.weekMin);
+                var updateWeekMax = Builders<CalculatedMetrics>.Update.Set("WeekMax", calculatedMetrics.weekMax);
+                var updateWeekAvg = Builders<CalculatedMetrics>.Update.Set("WeekAvg", calculatedMetrics.weekAvg);
 
-            metric.mac = "A5-A6";
+                var updateMonthMin = Builders<CalculatedMetrics>.Update.Set("MonthMin", calculatedMetrics.monthMin);
+                var updateMonthMax = Builders<CalculatedMetrics>.Update.Set("MonthMax", calculatedMetrics.monthMax);
+                var updateMonthAvg = Builders<CalculatedMetrics>.Update.Set("MonthAvg", calculatedMetrics.monthAvg);
 
-            return metric;
+
+                collection.UpdateOne(filter, updateDayMin);
+                collection.UpdateOne(filter, updateDayMax);
+                collection.UpdateOne(filter, updateDayAvg);
+
+                collection.UpdateOne(filter, updateWeekMin);
+                collection.UpdateOne(filter, updateWeekMax);
+                collection.UpdateOne(filter, updateWeekAvg);
+
+                collection.UpdateOne(filter, updateMonthMin);
+                collection.UpdateOne(filter, updateMonthMax);
+                collection.UpdateOne(filter, updateMonthAvg);
+            }
         }
 
 

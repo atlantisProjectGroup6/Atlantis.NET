@@ -9,7 +9,7 @@ namespace CalculationService
         GET, POST, PUT, DELETE
     }
 
-    class Connection
+    public class Connection
     {
         public string url { get; set; }
 
@@ -57,10 +57,10 @@ namespace CalculationService
             return strResponse;
         }
 
-        public string getData(httpVerb method, string endPoint, string postJSON)
+        public string getData(httpVerb method, string endPoint)
         {
             string strResponse = string.Empty;
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url  + postJSON + endPoint);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(endPoint);
             request.Method = method.ToString();
 
 

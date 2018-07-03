@@ -7,9 +7,10 @@ using System.Web;
 namespace CalculationService
 {
     [DataContract]
-    public class AverageSend
+    public class DataSend
     {
         [DataMember]
-        public float average { get; set; }
+        public float value { get; set; }
+
     }
 }

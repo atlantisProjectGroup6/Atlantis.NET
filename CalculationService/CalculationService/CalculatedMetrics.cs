@@ -12,13 +12,33 @@ namespace CalculationService
     {
         [BsonId(IdGenerator = typeof(ObjectIdGenerator))]
         public ObjectId id;
-        [BsonElement("dayAvg")]
+
+        //per day
+        [BsonElement("DayMin")]
+        public float dayMin;
+        [BsonElement("DayMax")]
+        public float dayMax;
+        [BsonElement("DayAvg")]
         public float dayAvg;
-        [BsonElement("weekAvg")]
+
+        //per week
+        [BsonElement("WeekMin")]
+        public float weekMin;
+        [BsonElement("WeekMax")]
+        public float weekMax;
+        [BsonElement("WeekAvg")]
         public float weekAvg;
-        [BsonElement("monthAvg")]
+
+        // per Month
+        [BsonElement("MonthMin")]
+        public float monthMin;
+        [BsonElement("MonthMax")]
+        public float monthMax;
+        [BsonElement("MonthAvg")]
         public float monthAvg;
         [BsonElement("deviceMAC")]
+
+
         public string deviceMAC;
 
         public CalculatedMetrics()
@@ -26,15 +46,18 @@ namespace CalculationService
 
         }
 
-        public CalculatedMetrics(float _dayAvg, float _weekAvg, float _monthAvg, string _deviceMAC)
+        public CalculatedMetrics(float dayMin, float dayMax, float dayAvg, float weekMin, float weekMax, float weekAvg, float monthMin, float monthMax, float monthAvg, string deviceMAC)
         {
-
-            dayAvg = _dayAvg;
-            weekAvg = _weekAvg;
-            monthAvg = _monthAvg;
-            deviceMAC = _deviceMAC;
-
+            this.dayMin = dayMin;
+            this.dayMax = dayMax;
+            this.dayAvg = dayAvg;
+            this.weekMin = weekMin;
+            this.weekMax = weekMax;
+            this.weekAvg = weekAvg;
+            this.monthMin = monthMin;
+            this.monthMax = monthMax;
+            this.monthAvg = monthAvg;
+            this.deviceMAC = deviceMAC;
         }
-
     }
 }
